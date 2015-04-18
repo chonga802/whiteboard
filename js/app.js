@@ -1,4 +1,4 @@
-//startScript("canvas1");
+startScript("canvas1");
 
 function startScript(canvasId)
 { 
