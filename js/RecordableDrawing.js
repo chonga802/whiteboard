@@ -2,119 +2,6 @@
 * @author : Ram Kulkarni (http://ramkulkarni.com)
 */
 
-function startScript()
-{ 
-	playbackInterruptCommand = "";
-	
-	$(document).bind("ready", function()
-	{
-		$("#pauseBtn").hide();
-		$("#playBtn").hide();
-		
-		drawing = new RecordableDrawing("canvas1");
-		
-		$("#recordBtn").click(function(){
-			var btnTxt = $("#recordBtn").prop("value");
-			if (btnTxt == 'Stop')
-				stopRecording();
-			else
-				startRecording();
-		});
-		
-		$("#playBtn").click(function(){
-			var btnTxt = $("#playBtn").prop("value");
-			if (btnTxt == 'Stop')
-				stopPlayback();
-			else
-				startPlayback();			
-		});
-		
-		$("#pauseBtn").click(function(){
-			var btnTxt = $("#pauseBtn").prop("value");
-			if (btnTxt == 'Pause')
-			{
-				pausePlayback();
-			} else if (btnTxt == 'Resume')
-			{
-				resumePlayback();
-			}
-		});
-		$("#clearBtn").click(function(){
-			drawing.clearCanvas();			
-		});
-	});
-	
-	function stopRecording()
-	{
-		$("#recordBtn").prop("value","Record");
-		$("#playBtn").show();
-		$("#pauseBtn").hide();
-		$("#clearBtn").show();
-		
-		drawing.stopRecording();
-	}
-	
-	function startRecording()
-	{
-		$("#recordBtn").prop("value","Stop");
-		$("#playBtn").hide();
-		$("#pauseBtn").hide();
-		$("#clearBtn").hide();
-		
-		drawing.startRecording();
-	}
-	
-	function stopPlayback()
-	{
-		playbackInterruptCommand = "stop";		
-	}
-	
-	function startPlayback()
-	{
-		drawing.playRecording(function() {
-			//on playback start
-			$("#playBtn").prop("value","Stop");
-			$("#recordBtn").hide();
-			$("#pauseBtn").show();
-			$("#clearBtn").hide();
-			playbackInterruptCommand = "";
-		}, function(){
-			//on playback end
-			$("#playBtn").prop("value","Play");
-			$("#playBtn").show();
-			$("#recordBtn").show();
-			$("#pauseBtn").hide();
-			$("#clearBtn").show();
-		}, function() {
-			//on pause
-			$("#pauseBtn").prop("value","Resume");
-			$("#recordBtn").hide();
-			$("#playBtn").hide();
-			$("#clearBtn").hide();
-		}, function() {
-			//status callback
-			return playbackInterruptCommand;
-		});
-	}
-	
-	function pausePlayback()
-	{
-		playbackInterruptCommand = "pause";
-	}
-	
-	function resumePlayback()
-	{
-		playbackInterruptCommand = "";
-		drawing.resumePlayback(function(){
-			$("#pauseBtn").prop("value","Pause");
-			$("#pauseBtn").show();
-			$("#recordBtn").hide();
-			$("#playBtn").show();
-			$("#clearBtn").hide();
-		});
-	}
-}
-
 RecordableDrawing = function (canvasId)
 {
 	var self = this;
@@ -127,10 +14,10 @@ RecordableDrawing = function (canvasId)
 	this.recordings = new Array(); //array of Recording objects
 	this.lastMouseX = this.lastMouseY = -1;
 	this.bgColor = "rgb(255,255,255)";
-	var currentLineWidth = 5;
-	var drawingColor = "rgb(0,0,0)";
+	this.currentLineWidth = 5;
+	this.drawingColor = "rgb(0,0,0)";
 	var pauseInfo = null;
-	
+
 	onMouseDown = function(event)
 	{
 		var canvasX = $(self.canvas).offset().left;
@@ -177,6 +64,24 @@ RecordableDrawing = function (canvasId)
 		self.lastMouseY = -1;
 	}
 	
+	this.setColor = function (color)
+	{
+		self.drawingColor = color;	
+		var colorAction = new SetColor(color);
+		self.actions.push(colorAction);
+		if (self.currentRecording != null)
+			self.currentRecording.addAction(colorAction);
+	}
+	
+	this.setStokeSize = function (sizeArg)
+	{
+		self.currentLineWidth = sizeArg;
+		var sizeAction = new SetStokeSize(sizeArg);
+		self.actions.push(sizeAction);
+		if (self.currentRecording != null)
+			self.currentRecording.addAction(sizeAction);
+	}
+	
 	this.startRecording = function()
 	{
 		self.currentRecording = new Recording(this);
@@ -190,6 +95,18 @@ RecordableDrawing = function (canvasId)
 		if (self.currentRecording != null)
 			self.currentRecording.stop();
 		self.currentRecording = null;
+	}
+	
+	this.pauseRecording = function()
+	{
+		if (self.currentRecording != null)
+			self.currentRecording.pause();
+	}
+
+	this.resumeRecording = function()
+	{
+		if (self.currentRecording != null)
+			self.currentRecording.resumeRecording();
 	}
 	
 	this.playRecording = function(onPlayStart, onPlayEnd, onPause, interruptActionStatus)
@@ -300,6 +217,26 @@ RecordableDrawing = function (canvasId)
 	
 	this.drawAction = function (actionArg, addToArray)
 	{
+		switch (actionArg.actionType)
+		{
+			case _POINT_ACTION :
+				drawPoint(actionArg);
+				break;
+			case _SET_COLOR_ACTION :
+				self.drawingColor = actionArg.color;
+				break;
+			case _SET_STOKE_SIZE:
+				self.currentLineWidth = actionArg.size;
+			default:
+				break;
+		}
+		
+		if (addToArray)
+			self.actions.push(actionArg);
+	}
+	
+	function drawPoint (actionArg)
+	{
 		var x = actionArg.x;
 		var y = actionArg.y;
 		
@@ -316,10 +253,8 @@ RecordableDrawing = function (canvasId)
 			self.ctx.stroke();
 			break;
 		}
-		if (addToArray)
-			self.actions.push(actionArg);
 	}	
-		
+	
 	__init = function()
 	{
 		self.canvas = $("#" + canvasId);
@@ -350,7 +285,6 @@ Recording = function (drawingArg)
 {
 	var self = this;
 	this.drawing = drawingArg;
-	this.timeSlots = new Object(); //Map with key as time slot and value as array of Point objects
 	
 	this.buffer = new Array(); //array of Point objects 
 	this.timeInterval = 100; //10 miliseconds
@@ -358,10 +292,13 @@ Recording = function (drawingArg)
 	this.started = false;
 	this.intervalId = null;
 	this.currTimeSlot = 0;
-	this.actionsSet = null;
+	this.actionsSet = null; //of type ActionSet
 	this.currActionSet = null;
 	this.recStartTime = null;
 	this.pauseInfo = null;
+	
+	var totalPauseTime = 0;
+	var pauseStartTime = 0;
 	
 	this.start = function()
 	{
@@ -385,11 +322,24 @@ Recording = function (drawingArg)
 		self.started = false;
 	}
 	
+	this.pause = function()
+	{
+		pauseStartTime = (new Date()).getTime();
+		window.clearInterval(self.intervalId);
+	}
+	
+	this.resumeRecording = function() {
+		totalPauseTime += (new Date()).getTime() - pauseStartTime;
+		pauseStartTime = 0;
+		self.intervalId = window.setInterval(self.onInterval, self.timeInterval);
+	}
+	
+	
 	this.onInterval = function()
 	{
 		if (self.buffer.length > 0)
 		{
-			var timeSlot = (new Date()).getTime() - self.recStartTime;
+			var timeSlot = (new Date()).getTime() - self.recStartTime - totalPauseTime;
 		
 			if (self.currActionSet == null)
 			{
@@ -499,6 +449,13 @@ Recording = function (drawingArg)
 	}
 }
 
+_POINT_ACTION = 1;
+_SET_COLOR_ACTION = 2;
+_SET_STOKE_SIZE = 3;
+
+//Action Types
+//	1 - Point
+//	2 = SetColor
 Action = function()
 {
 	var self = this;
@@ -506,7 +463,6 @@ Action = function()
 	this.x = 0;
 	this.y = 0;
 	this.isMovable = false;
-	this.index = 0;
 	
 	if (arguments.length > 0)
 	{
@@ -524,7 +480,7 @@ Point = function (argX,argY,typeArg)
 	var self = this;
 	this.type = typeArg; //0 - moveto, 1 - lineto
 	
-	Action.call(this,1,argX,argY);
+	Action.call(this,_POINT_ACTION,argX,argY);
 }
 
 Point.prototype = new Action();
@@ -537,3 +493,21 @@ ActionsSet = function (interalArg, actionsArrayArg)
 	this.interval = interalArg;
 	this.next = null;
 }
+
+SetColor = function (colorValue)
+{
+	var self = this;
+	this.color = colorValue;
+	
+	Action.call(this,_SET_COLOR_ACTION);
+}
+SetColor.prototype = new Action();
+
+SetStokeSize = function (sizeArg)
+{
+	var self = this;
+	this.size = sizeArg;
+	
+	Action.call(this,_SET_STOKE_SIZE);
+}
+SetStokeSize.prototype = new Action();
