@@ -12,6 +12,7 @@ RecordableDrawing = function (canvasId)
 	this.mouseDown = false;
 	this.currentRecording = null; //instance of Recording
 	this.recordings = new Array(); //array of Recording objects
+	this.recordingsList = new Array(); //array of recordings
 	this.lastMouseX = this.lastMouseY = -1;
 	this.bgColor = "rgb(255,255,255)";
 	this.currentLineWidth = 5;

@@ -13,6 +13,7 @@ function startScript(canvasId)
 		drawing = new RecordableDrawing(canvasId);
 		
 		$("#recordBtn").click(function(){
+			console.log('recordBtn clicked');
 			var btnTxt = $("#recordBtn").prop("value");
 			if (btnTxt == 'Stop')
 				stopRecording();
@@ -24,6 +25,7 @@ function startScript(canvasId)
 
 		function playRecordings()
 		{
+			//drawing.recordings = drawing.recordingsList[num];
 			if (drawing.recordings.length == 0)
 			{
 				alert("No recording to play");
@@ -37,6 +39,7 @@ function startScript(canvasId)
 		}
 		
 		$("#pauseBtn").click(function(){
+			console.log('pauseBtn clicked');
 			var btnTxt = $("#pauseBtn").prop("value");
 			if (btnTxt == 'Pause')
 			{
@@ -53,10 +56,12 @@ function startScript(canvasId)
 			}
 		});
 		$("#clearBtn").click(function(){
+			console.log('clearBtn clicked');
 			drawing.clearCanvas();			
 		});
 	
 		$("#serializeBtn").click(function() {
+			console.log('serializeBtn clicked');
 			var serResult = serializeDrawing(drawing);
 			if (serResult != null)
 			{
@@ -68,33 +73,9 @@ function startScript(canvasId)
 			}
 		});
 
-		function showSerializerDiv(showSubmit)
-		{
-			$("#drawingDiv").hide();
-			$("#canvasBtnsDiv").hide();
-			$("#serializerDiv").show();	
-			if (showSubmit)
-				$("#okBtn").show();
-			else
-				$("#okBtn").hide();
-		}
-
-		function hideSerializerDiv()
-		{
-			$("#drawingDiv").show();
-			$("#canvasBtnsDiv").show();
-			$("#serializerDiv").hide();	
-		}
-
-		$("#deserializeBtn").click(function(){
-			showSerializerDiv(true);
-		});
-
-		$("#cancelBtn").click(function(){
-			hideSerializerDiv();
-		});
 
 		$("#okBtn").click(function(){
+			console.log('okBtn clicked');
 			var serTxt = $("#serDataTxt").val();
 			var result = deserializeDrawing(serTxt);
 			if (result == null)
@@ -118,12 +99,14 @@ function startScript(canvasId)
 		});
 		
 		$("#colorsDiv .colorbox").click(function(){
+			console.log('color selected');
 			$("#colorsDiv .colorbox").removeClass("selectedColor");
 			$(this).addClass("selectedColor");
 			drawing.setColor($(this).css("background-color"));
 		});
 		
 		$(".stroke").click(function(){
+			console.log('stroke selected');
 			$(".stroke_selected").removeClass("stroke_selected");
 			$(this).addClass("stroke_selected");
 			var size = $(this).css("border-radius");
@@ -137,6 +120,8 @@ function startScript(canvasId)
 	
 	function stopRecording()
 	{
+		console.log('stop recording');
+		addButton();
 		$("#recordBtn").prop("value","Record");
 		$("#playBtn").show();
 		$("#pauseBtn").hide();
@@ -148,6 +133,7 @@ function startScript(canvasId)
 	
 	function startRecording()
 	{
+		console.log('start recording');
 		$("#recordBtn").prop("value","Stop");
 		$("#playBtn").hide();
 		$("#pauseBtn").show();
@@ -164,11 +150,13 @@ function startScript(canvasId)
 	
 	function stopPlayback()
 	{
+		console.log('stop playback');
 		playbackInterruptCommand = "stop";		
 	}
 	
 	function startPlayback()
 	{
+		console.log('start playback');
 		var currColor = $("#colorsDiv .selectedColor").css("background-color");
 		var currStrokeSize = parseInt($(".stroke_selected").css("border-radius"));
 		
@@ -204,11 +192,13 @@ function startScript(canvasId)
 	
 	function pausePlayback()
 	{
+		console.log('pause playback');
 		playbackInterruptCommand = "pause";
 	}
 	
 	function resumePlayback()
 	{
+		console.log('resume playback');
 		playbackInterruptCommand = "";
 		drawing.resumePlayback(function(){
 			$("#pauseBtn").prop("value","Pause");
@@ -221,13 +211,34 @@ function startScript(canvasId)
 	
 	function pauseRecording()
 	{
+		console.log('pause recording');
 		drawing.pauseRecording();
 		$("#pauseBtn").prop("value","Resume");
 	}
 	
 	function resumeRecording()
 	{
+		console.log('record recording');
 		drawing.resumeRecording();
 		$("#pauseBtn").prop("value","Pause");
+	}
+
+	function addButton() {
+		console.log('add button');
+		//add recordings to list of recordings saved
+		drawing.recordingsList.push(drawing.recordings);
+	    //Create an input type dynamically.   
+	    var element = document.createElement("input");
+	    //Assign different attributes to the element. 
+	    element.type = "button";
+	    var num = drawing.recordingsList.length;
+	    element.name = num
+	    element.value = num;
+	    element.onclick = function() { 
+	        drawing.recordings = drawing.recordingsList[this.value-1];
+	    };
+
+	    var btns = document.getElementById("canvasBtnsDiv");
+	    btns.appendChild(element);
 	}
 }
