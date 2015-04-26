@@ -12,6 +12,11 @@ function startScript(canvasId)
 		
 		drawing = new RecordableDrawing(canvasId);
 		
+		$("#undoBtn").click(function(){
+			console.log('undoBtn clicked');
+			drawing.undo();
+		});
+
 		$("#recordBtn").click(function(){
 			console.log('recordBtn clicked');
 			var btnTxt = $("#recordBtn").prop("value");
@@ -59,44 +64,7 @@ function startScript(canvasId)
 			console.log('clearBtn clicked');
 			drawing.clearCanvas();			
 		});
-	
-		$("#serializeBtn").click(function() {
-			console.log('serializeBtn clicked');
-			var serResult = serializeDrawing(drawing);
-			if (serResult != null)
-			{
-				$("#serDataTxt").val(serResult);
-				showSerializerDiv();
-			} else
-			{
-				alert("Error serializing data");
-			}
-		});
 
-
-		$("#okBtn").click(function(){
-			console.log('okBtn clicked');
-			var serTxt = $("#serDataTxt").val();
-			var result = deserializeDrawing(serTxt);
-			if (result == null)
-				result = "Error : Unknown error in deserializing the data";
-			if (result instanceof Array == false)
-			{
-				$("#serDataTxt").val(result.toString());
-				showSerializerDiv(false);
-				return;
-			} 
-			else
-			{
-				//data is successfully deserialize
-				drawing.recordings = result;
-				//set drawing property of each recording
-				for (var i = 0; i < result.length; i++)
-					result[i].drawing = drawing;
-				hideSerializerDiv();
-				playRecordings();
-			}
-		});
 		
 		$("#colorsDiv .colorbox").click(function(){
 			console.log('color selected');
@@ -121,7 +89,7 @@ function startScript(canvasId)
 	function stopRecording()
 	{
 		console.log('stop recording');
-		addButton();
+		addRecordingButton();
 		$("#recordBtn").prop("value","Record");
 		$("#playBtn").show();
 		$("#pauseBtn").hide();
@@ -141,7 +109,7 @@ function startScript(canvasId)
 		
 		drawing.startRecording();
 		isRecording = true;
-		//set curent color
+		//set current color
 		var color = $("#colorsDiv .selectedColor").css("background-color");
 		var strokesize = parseInt($(".stroke_selected").css("border-radius"));
 		drawing.setColor(color);
@@ -223,8 +191,8 @@ function startScript(canvasId)
 		$("#pauseBtn").prop("value","Pause");
 	}
 
-	function addButton() {
-		console.log('add button');
+	function addRecordingButton() {
+		console.log('add recording button');
 		//add recordings to list of recordings saved
 		drawing.recordingsList.push(drawing.recordings);
 	    //Create an input type dynamically.   
