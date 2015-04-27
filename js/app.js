@@ -78,12 +78,12 @@ function startScript(canvasId)
 			$(".stroke_selected").removeClass("stroke_selected");
 			$(this).addClass("stroke_selected");
 			var size = $(this).css("border-radius");
-			drawing.setStokeSize(parseInt(size));
+			drawing.setStrokeSize(parseInt(size));
 		});
 		
 		var size = parseInt($(".stroke_selected").css("border-radius"));
 		if (size > 0)
-			drawing.setStokeSize(size);
+			drawing.setStrokeSize(size);
 	});
 	
 	function stopRecording()
@@ -113,7 +113,7 @@ function startScript(canvasId)
 		var color = $("#colorsDiv .selectedColor").css("background-color");
 		var strokesize = parseInt($(".stroke_selected").css("border-radius"));
 		drawing.setColor(color);
-		drawing.setStokeSize(strokesize);
+		drawing.setStrokeSize(strokesize);
 	}
 	
 	function stopPlayback()
@@ -145,7 +145,7 @@ function startScript(canvasId)
 			if (currColor && currColor != "")
 				drawing.setColor(currColor);
 			if (currStrokeSize > 0)
-				drawing.setStokeSize(currStrokeSize);
+				drawing.setStrokeSize(currStrokeSize);
 		}, function() {
 			//on pause
 			$("#pauseBtn").prop("value","Resume");

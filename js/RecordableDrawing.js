@@ -17,23 +17,38 @@ RecordableDrawing = function (canvasId)
 	this.bgColor = "rgb(255,255,255)";
 	this.currentLineWidth = 5;
 	this.drawingColor = "rgb(0,0,0)";
+	//ANGIE -- did not have following 3 variables
+	this.isPlaying =false;
+	this.startX=0;
+	this.startY=0;
 	var pauseInfo = null;
 
 	onMouseDown = function(event)
 	{
-		var canvasX = $(self.canvas).offset().left;
-		var canvasY = $(self.canvas).offset().top;
+		if(self.isPlaying==false){
+			var canvasX = $(self.canvas).offset().left;
+			var canvasY = $(self.canvas).offset().top;
+			
+			self.mouseDown = true;
+			var x = Math.floor(event.pageX - canvasX);
+			var y = Math.floor(event.pageY - canvasY);
+			
+			var	currAction = new Point(x,y,0);
+			self.drawAction(currAction,true);
+			if (self.currentRecording != null)
+				self.currentRecording.addAction(currAction);
+			event.preventDefault();
+			return false;
+		} //ANGIE -- did not have a whole if else statement before. just what is inside the if  
+		else
+			var canvasX = $(self.canvas).offset().left;
+			var canvasY = $(self.canvas).offset().top;
+			self.mouseDown = true;
+			self.shiftX = Math.floor(event.pageX - canvasX);
+			self.shiftY = Math.floor(event.pageY - canvasY);
+			console.log("setting variables to "+canvasX +" and "+canvasY+"\n");
+			return false;
 		
-		self.mouseDown = true;
-		var x = Math.floor(event.pageX - canvasX);
-		var y = Math.floor(event.pageY - canvasY);
-		
-		var	currAction = new Point(x,y,0);
-		self.drawAction(currAction,true);
-		if (self.currentRecording != null)
-			self.currentRecording.addAction(currAction);
-		event.preventDefault();
-		return false;
 	}
 	
 	onMouseMove = function(event)
@@ -74,10 +89,10 @@ RecordableDrawing = function (canvasId)
 			self.currentRecording.addAction(colorAction);
 	}
 	
-	this.setStokeSize = function (sizeArg)
+	this.setStrokeSize = function (sizeArg)
 	{
 		self.currentLineWidth = sizeArg;
-		var sizeAction = new SetStokeSize(sizeArg);
+		var sizeAction = new SetStrokeSize(sizeArg);
 		self.actions.push(sizeAction);
 		if (self.currentRecording != null)
 			self.currentRecording.addAction(sizeAction);
@@ -112,6 +127,8 @@ RecordableDrawing = function (canvasId)
 	
 	this.playRecording = function(onPlayStart, onPlayEnd, onPause, interruptActionStatus)
 	{
+		//ANGIE -- did not have isplaying variable
+		//self.isPlaying = true;
 		if (typeof interruptActionStatus == 'undefined')
 			interruptActionStatus = null;
 		
@@ -226,7 +243,7 @@ RecordableDrawing = function (canvasId)
 			case _SET_COLOR_ACTION :
 				self.drawingColor = actionArg.color;
 				break;
-			case _SET_STOKE_SIZE:
+			case _SET_STROKE_SIZE:
 				self.currentLineWidth = actionArg.size;
 			default:
 				break;
@@ -445,15 +462,23 @@ Recording = function (drawingArg)
 			switch (actionArray[i].actionType)
 			{
 				case _POINT_ACTION :
-					//HERE IS WHERE WE ACTUALLY SHIFT THE IMAGE
-					actionArray[i].x +=100;
-					actionArray[i].y +=100;
+					//ANGIE
+					//HERE IS WHERE WE ACTUALLY SHIFT/TRANSLATE THE IMAGE
+					console.log(actionArray[i].x);
+					console.log(actionArray[i].y);
+					console.log(actionArray[i].x+self.shiftX);
+					console.log(actionArray[i].x+self.shiftY);					
+					// actionArray[i].x +=self.shiftX;
+					// actionArray[i].y +=self.shiftY;
+					// actionArray[i].x +=100;
+					// actionArray[i].y +=100;
+					
 					self.drawing.drawAction(actionArray[i],false);
 					break;
 				case _SET_COLOR_ACTION :
 					self.drawing.drawAction(actionArray[i],false);
 					break;
-				case _SET_STOKE_SIZE:
+				case _SET_STROKE_SIZE:
 					self.drawing.drawAction(actionArray[i],false);
 				default:
 					break;
@@ -471,7 +496,7 @@ Recording = function (drawingArg)
 
 _POINT_ACTION = 1;
 _SET_COLOR_ACTION = 2;
-_SET_STOKE_SIZE = 3;
+_SET_STROKE_SIZE = 3;
 
 //Action Types
 //	1 - Point
@@ -523,11 +548,11 @@ SetColor = function (colorValue)
 }
 SetColor.prototype = new Action();
 
-SetStokeSize = function (sizeArg)
+SetStrokeSize = function (sizeArg)
 {
 	var self = this;
 	this.size = sizeArg;
 	
-	Action.call(this,_SET_STOKE_SIZE);
+	Action.call(this,_SET_STROKE_SIZE);
 }
-SetStokeSize.prototype = new Action();
+SetStrokeSize.prototype = new Action();
