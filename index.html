@@ -5,6 +5,7 @@
 <title>Whiteboard</title>
 
 <link rel="stylesheet" type="text/css" href="style.css">
+<link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 
 </head>
 
@@ -13,38 +14,62 @@
 <div id="main">
 
 <div id="drawingDiv" >
-	<canvas id="canvas1" width="1000px" height="800px;float:left" style="border:medium;border-color:black;border-style:solid;"></canvas></p>
-<div style="float:left" id="colorsDiv">
-		Colors :
-<div class="colorbox selectedColor" id="blackbox" style="background-color:black" ></div>
-<div class="colorbox" id="redbox" style="background-color:red;"></div>
-<div class="colorbox" id="bluebox" style="background-color:blue;"></div>
-<div class="colorbox" id="greenbox" style="background-color:green;"></div>
-<div>
-<br />
-		Stroke Size :
-<div class="stroke stroke_selected" style="border-radius:3px;border-width:3px;"></div>
-<div class="stroke" style="border-radius:6px;border-width:5px;"></div>
-<div class="stroke" style="border-radius:8px;border-width:7px;"></div>
-<div class="stroke" style="border-radius:12px;border-width:10px;"></div>
-<div class="stroke" style="border-radius:16px;border-width:13px;"></div>
-<div class="stroke" style="border-radius:18px;border-width:15px;"></div>
-<div>
-<br />
-		Eraser:
-	<div class="colorbox" id="whitebox" style="background-color:white"></div>
-</p></div>
-</p></div>
+	<canvas id="canvas1" width="1000px" height="600px;float:left" style="border:thin;border-color:#CCD6E0;border-style:solid;z-index:1;"></canvas></p>
+	<!--<canvas id="canvas1" width="1000px" height="600px;float:left" style="z-index:1;"></canvas></p>-->
+
+
+<div id = "sidebar">
+	<img src="./images/sidebar.png" alt="Sidebar" style="width:30px;height:auto" id="sidebarBtn">
+
+	<div id = "hidden_sidebar">
+		<div style="float:left" id="colorsDiv">
+				Colors :
+		<div class="colorbox selectedColor" id="blackbox" style="background-color:black" ></div>
+		<div class="colorbox" id="redbox" style="background-color:red;"></div>
+		<div class="colorbox" id="bluebox" style="background-color:blue;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:green;"></div>
+		<div>
+		<br />
+				Stroke Size :
+		<div class="stroke stroke_selected" style="border-radius:3px;border-width:3px;"></div>
+		<div class="stroke" style="border-radius:6px;border-width:5px;"></div>
+		<div class="stroke" style="border-radius:8px;border-width:7px;"></div>
+		<div class="stroke" style="border-radius:12px;border-width:10px;"></div>
+		<div class="stroke" style="border-radius:16px;border-width:13px;"></div>
+		<div class="stroke" style="border-radius:18px;border-width:15px;"></div>
+		<div>
+		<br />
+				Eraser:
+			<div class="colorbox" id="whitebox" style="background-color:white"></div>
+		</p></div>
+		</p></div>
+		</div>
+		<p></p>
+	</div>
 </div>
-<p></p>
+
+
 <div id="canvasBtnsDiv">
+
+	<img src="./images/recordbutton.png" alt="Record" style="width:50px;height:auto" id="recordBtn">
+	<img src="./images/clearbutton.png" alt="Clear" style="width:55px;height:auto" id="clearBtn">
+	<img src="./images/undobutton.png" alt="Undo" style="width:50px;height:auto" id="undoBtn">
+	<img src="./images/playbutton.png" alt="Play" style="width:50px;height:auto" id="playBtn">
+	<img src="./images/pause_recording.png" alt="Pause" style="width:50px;height:auto" id="pauseBtn">
+	<p> Pick a recording then hit Play: </p>
+
+</div>
+
+
+
+<!--<div id="canvasBtnsDiv">
 <input type="button" id="undoBtn" value="Undo">
 <input type="button" id="recordBtn" value="Record">
 <input type="button" id="playBtn" value="Play">
 <input type="button" id="pauseBtn" value="Pause">
 <input type="button" id="clearBtn" value="Clear"><br/>
 <p> Pick a recording then hit Play: </p>
-</div>
+</div>-->
 
 </div><!-- #main -->
 

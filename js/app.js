@@ -8,7 +8,14 @@ function startScript(canvasId)
 	$(document).bind("ready", function()
 	{
 		$("#pauseBtn").hide();
-		//$("#playBtn").hide();
+		$("#undoBtn").hide();
+		$("#hidden_sidebar").hide();
+		$("#recordBtn").css('cursor', 'pointer');
+		$("#pauseBtn").css('cursor', 'pointer');
+		$("#playBtn").css('cursor', 'pointer');
+		$("#sidebarBtn").css('cursor', 'pointer');
+		$("#clearBtn").css('cursor', 'pointer');
+
 		
 		drawing = new RecordableDrawing(canvasId);
 		
@@ -17,16 +24,93 @@ function startScript(canvasId)
 			drawing.undo();
 		});
 
+
+		$("#recordBtn").hover(function(){
+				if($(this).attr('src')=="./images/recordbutton.png"){
+					$(this).attr('src', "./images/record_hover.png");
+				}
+				else if($(this).attr('src')=="./images/recording.png"){
+					$(this).attr('src', "./images/stopbutton.png");
+				}
+				else if($(this).attr('src')=="./images/stopbutton.png"){
+					$(this).attr('src', "./images/recording.png");
+				}
+				else if($(this).attr('src')=="./images/stopbutton1.png"){
+					//do nothing. this is when we're doing pause/resume/stop.
+				}
+				else{
+					$(this).attr('src', "./images/recordbutton.png");
+				}
+		});
+
 		$("#recordBtn").click(function(){
 			console.log('recordBtn clicked');
-			var btnTxt = $("#recordBtn").prop("value");
-			if (btnTxt == 'Stop')
-				stopRecording();
-			else
+			if($(this).attr('src')=="./images/record_hover.png"){
+				//start recording!
 				startRecording();
+				$(this).attr('src', "./images/stopbutton.png");
+			}
+			else if($(this).attr('src', "./images/stopbutton.png") || $(this).attr('src', "./images/stopbutton1.png")){
+				//stop recording!
+				$(this).attr('src', "./images/record_hover.png");
+				stopRecording();
+			}
 		});
-		
-		$("#playBtn").click(playRecordings);
+
+		$("#pauseBtn").click(function(){
+			if($("#pauseBtn").attr('src')=="./images/pause_recording.png"){
+				$("#pauseBtn").attr('src', "./images/resume_recording.png");
+				$("#recordBtn").attr('src', "./images/stopbutton1.png");
+				pauseRecording();
+			}
+			else if($("#pauseBtn").attr('src')=="./images/resume_recording.png"){
+				$("#recordBtn").attr('src', "./images/recording.png");
+				$("#pauseBtn").attr('src', "./images/pause_recording.png");
+				//resume recording!
+				resumeRecording();
+				
+			}		
+	
+		});
+
+		//$("#playBtn").mouseenter(function(){
+
+		$("#playBtn").hover(function(){
+				if($("#playBtn").attr('src')=="./images/playbutton.png"){
+					$("#playBtn").attr('src', "./images/play_hover.png");
+				}
+				else if($("#playBtn").attr('src')=="./images/pause_hover.png"){
+					$("#playBtn").attr('src', "./images/pausebutton.png");
+				}
+				else if($("#playBtn").attr('src')=="./images/pausebutton.png"){
+					$("#playBtn").attr('src', "./images/pause_hover.png");
+				}
+				else{
+					$("#playBtn").attr('src', "./images/playbutton.png");
+				}
+		});
+
+		$("#playBtn").click(function(){
+			if($("#playBtn").attr('src')=="./images/play_hover.png"){
+				$("#playBtn").attr('src', "./images/pause_hover.png");
+				playRecordings();	
+			}
+			else{
+				$("#playBtn").attr('src', "./images/play_hover.png");
+				pausePlayback();
+			}
+		});
+
+		$("#sidebarBtn").click(function(){
+			if($("#sidebar").width() < 100){
+				$("#sidebar").animate({'width':'150', 'left':'-=100'});
+			}
+			else{
+				$("#sidebar").animate({'width':'50', 'left':'+=100'});
+			}
+			$("#hidden_sidebar").toggle(600);
+		});
+
 
 		function playRecordings()
 		{
@@ -34,6 +118,8 @@ function startScript(canvasId)
 			if (drawing.recordings.length == 0)
 			{
 				alert("No recording to play");
+				$("#playBtn").attr('src', "./images/playbutton_hover.png");
+
 				return;
 			}
 			var btnTxt = $("#playBtn").prop("value");
@@ -43,23 +129,6 @@ function startScript(canvasId)
 				startPlayback();			
 		}
 		
-		$("#pauseBtn").click(function(){
-			console.log('pauseBtn clicked');
-			var btnTxt = $("#pauseBtn").prop("value");
-			if (btnTxt == 'Pause')
-			{
-				if (isRecording)
-					pauseRecording();
-				else
-					pausePlayback();
-			} else if (btnTxt == 'Resume')
-			{
-				if (isRecording)
-					resumeRecording();
-				else
-					resumePlayback();
-			}
-		});
 		$("#clearBtn").click(function(){
 			console.log('clearBtn clicked');
 			drawing.clearCanvas();			
@@ -90,11 +159,13 @@ function startScript(canvasId)
 	{
 		console.log('stop recording');
 		addRecordingButton();
-		$("#recordBtn").prop("value","Record");
+		//$("#recordBtn").prop("value","Record");
 		$("#playBtn").show();
+		$("#pauseBtn").attr('src', "./images/pause_recording.png");
+		$("#undoBtn").hide();
 		$("#pauseBtn").hide();
 		$("#clearBtn").show();
-		
+
 		drawing.stopRecording();
 		isRecording = false;
 	}
@@ -102,10 +173,11 @@ function startScript(canvasId)
 	function startRecording()
 	{
 		console.log('start recording');
-		$("#recordBtn").prop("value","Stop");
+		//$("#recordBtn").prop("value","Stop");
 		$("#playBtn").hide();
 		$("#pauseBtn").show();
 		$("#clearBtn").hide();
+		$("#undoBtn").show();
 		
 		drawing.startRecording();
 		isRecording = true;
@@ -132,12 +204,13 @@ function startScript(canvasId)
 			//on playback start
 			$("#playBtn").prop("value","Stop");
 			$("#recordBtn").hide();
-			$("#pauseBtn").show();
+			//$("#pauseBtn").show();
 			$("#clearBtn").hide();
 			playbackInterruptCommand = "";
 		}, function(){
 			//on playback end
 			$("#playBtn").prop("value","Play");
+			$("#playBtn").attr('src', "./images/playbutton.png");
 			$("#playBtn").show();
 			$("#recordBtn").show();
 			$("#pauseBtn").hide();

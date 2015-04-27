@@ -1,3 +1,11 @@
+/*body{
+	background-color: #CCD6E0;
+}*/
+
+*{
+	font-family: 'Raleway', sans-serif;
+}
+
 #colorsDiv .colorbox {
 		width:20px; 
 		height:20px;
@@ -29,4 +37,55 @@
 }.stroke_selected
 {
 	border-color:black;
+}#canvasBtnsDiv{
+	position: fixed;
+	top: 480px;
+	left: 30px;
+}
+#recordBtn{
+	position: absolute;
+	top: -440px;
+}
+#pauseBtn{	
+	position: absolute;
+	top: -440px;
+	left: 55px;
+}
+#playBtn{
+	position: absolute;
+	left: 0px;
+	top: -40px;
+}
+#undoBtn{
+	position:absolute;
+	top: -440px;
+	left: 770px;
+}
+#canvasBtnsDiv p{
+	font-family: 'Raleway', sans-serif;
+	position: relative;
+	top: 15px;
+}
+
+#sidebar{
+	position: fixed;
+	width: 50px;
+	height: 601px;
+	left: 960px;
+	background-color: #CCD6E0;
+}
+#sidebarBtn{
+	position:relative;
+	top: 10px;
+	left: 10px;
+}
+#hidden_sidebar{
+	position: relative;
+	top: 50px;
+	left: 15px;
+}
+#clearBtn{
+	position: absolute;
+	left: 60px;
+	top: -425px;
 }
