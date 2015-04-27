@@ -470,8 +470,8 @@ Recording = function (drawingArg)
 					console.log(actionArray[i].x+self.shiftY);					
 					// actionArray[i].x +=self.shiftX;
 					// actionArray[i].y +=self.shiftY;
-					//actionArray[i].x +=100;
-					actionArray[i].y +=100;
+					actionArray[i].x +=100;
+					//actionArray[i].y +=100;
 					
 					self.drawing.drawAction(actionArray[i],false);
 					break;
