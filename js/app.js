@@ -2,6 +2,12 @@ startScript("canvas1");
 
 function startScript(canvasId)
 { 
+	/*var imageColorsSelected=["./images/unselected_red.png", "./images/unselected_blue.png",
+	"./images/unselected_green.png", "./images/unselected_purple.png"];*/
+
+	var imageColorsUnselected=["./images/selected_green.png", "./images/selected_blue.png", 
+	"./images/selected_red.png", "./images/selected_purple.png"];
+
 	var isRecording = false;
 	playbackInterruptCommand = "";
 	
@@ -15,6 +21,8 @@ function startScript(canvasId)
 		$("#playBtn").css('cursor', 'pointer');
 		$("#sidebarBtn").css('cursor', 'pointer');
 		$("#clearBtn").css('cursor', 'pointer');
+		//$("#canvasBtnsDiv>img").css('cursor', 'pointer');
+
 
 		
 		drawing = new RecordableDrawing(canvasId);
@@ -73,32 +81,41 @@ function startScript(canvasId)
 	
 		});
 
-		//$("#playBtn").mouseenter(function(){
-
-		$("#playBtn").hover(function(){
-				if($("#playBtn").attr('src')=="./images/playbutton.png"){
-					$("#playBtn").attr('src', "./images/play_hover.png");
-				}
-				else if($("#playBtn").attr('src')=="./images/pause_hover.png"){
-					$("#playBtn").attr('src', "./images/pausebutton.png");
-				}
-				else if($("#playBtn").attr('src')=="./images/pausebutton.png"){
-					$("#playBtn").attr('src', "./images/pause_hover.png");
-				}
-				else{
-					$("#playBtn").attr('src', "./images/playbutton.png");
-				}
+		$("#playBtn").mouseenter(function(){
+			if($("#playBtn").attr('src')=="./images/playbutton.png"){
+				$("#playBtn").attr('src', "./images/play_hover.png");
+			}
+			else if($("#playBtn").attr('src')=="./images/pausebutton.png"){
+				$("#playBtn").attr('src', "./images/pause_hover.png");
+			}
 		});
 
+		$("#playBtn").mouseleave(function(){
+			if($("#playBtn").attr('src')=="./images/play_hover.png"){
+				$("#playBtn").attr('src', "./images/playbutton.png");
+			}
+			else if($("#playBtn").attr('src')=="./images/pause_hover.png"){
+				$("#playBtn").attr('src', "./images/pausebutton.png");
+			}
+		});
+
+
 		$("#playBtn").click(function(){
+
 			if($("#playBtn").attr('src')=="./images/play_hover.png"){
 				$("#playBtn").attr('src', "./images/pause_hover.png");
-				playRecordings();	
+				if($("#playBtn").prop("value","Play")){
+					playRecordings();	
+				}
+				else if($("#playBtn").prop("value","Resume")){
+					resumePlayback();
+				}
 			}
 			else{
 				$("#playBtn").attr('src', "./images/play_hover.png");
 				pausePlayback();
 			}
+			
 		});
 
 		$("#sidebarBtn").click(function(){
@@ -221,9 +238,9 @@ function startScript(canvasId)
 				drawing.setStrokeSize(currStrokeSize);
 		}, function() {
 			//on pause
-			$("#pauseBtn").prop("value","Resume");
+			$("#playBtn").prop("value","Resume");
 			$("#recordBtn").hide();
-			$("#playBtn").hide();
+			//$("#playBtn").hide();
 			$("#clearBtn").hide();
 		}, function() {
 			//status callback
@@ -235,6 +252,7 @@ function startScript(canvasId)
 	{
 		console.log('pause playback');
 		playbackInterruptCommand = "pause";
+		$("#playBtn").attr('src', "./images/play_hover.png");
 	}
 	
 	function resumePlayback()
@@ -242,7 +260,7 @@ function startScript(canvasId)
 		console.log('resume playback');
 		playbackInterruptCommand = "";
 		drawing.resumePlayback(function(){
-			$("#pauseBtn").prop("value","Pause");
+			$("#playBtn").prop("value","Pause");
 			$("#pauseBtn").show();
 			$("#recordBtn").hide();
 			$("#playBtn").show();
@@ -269,14 +287,32 @@ function startScript(canvasId)
 		//add recordings to list of recordings saved
 		drawing.recordingsList.push(drawing.recordings);
 	    //Create an input type dynamically.   
-	    var element = document.createElement("input");
-	    //Assign different attributes to the element. 
-	    element.type = "button";
-	    var num = drawing.recordingsList.length;
-	    element.name = num
-	    element.value = num;
+	    var element=document.createElement("img");
+
+	    //element.setAttribute('src', "./images/playback_unselected.png");
+	    
+	   	var num = drawing.recordingsList.length;
+	   	var temp=num%(imageColorsUnselected.length);
+	   	element.setAttribute('src', imageColorsUnselected[temp]);
+	   	element.setAttribute('height', '80');
+	    element.setAttribute('width', 'auto');
+	    element.id=num;
+	    element.value=num;
+	    var t = document.createTextNode(num);
+	    element.appendChild(t);
 	    element.onclick = function() { 
+	    	//show vs. hide images??
 	        drawing.recordings = drawing.recordingsList[this.value-1];
+	        //$("#" + i).setAttribute('src', "./images/playback_unselected");
+	        //element.setAttribute('src', "./images/playback_selected.png");
+	        for(var i=1; i<=drawing.recordingsList.length; i++){
+	        	if(i == this.value){
+	        		$("#" + i).attr('src', "./images/selected_orange.png");
+					//$("#" + i).attr('src', imageColorsSelected[i%(imageColorsUnselected.length)]);
+				}
+				else
+	       			$("#" + i).attr('src', imageColorsUnselected[i%(imageColorsUnselected.length)]);
+			}
 	    };
 
 	    var btns = document.getElementById("canvasBtnsDiv");
