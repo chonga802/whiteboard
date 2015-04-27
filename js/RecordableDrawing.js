@@ -440,8 +440,27 @@ Recording = function (drawingArg)
 	
 	this.drawActions = function (actionArray, onPlayEnd, isFirst, isLast)
 	{
-		for (var i = 0; i < actionArray.length; i++)
-			self.drawing.drawAction(actionArray[i],false);
+		for (var i = 0; i < actionArray.length; i++){
+
+			switch (actionArray[i].actionType)
+			{
+				case _POINT_ACTION :
+					//HERE IS WHERE WE ACTUALLY SHIFT THE IMAGE
+					actionArray[i].x +=100;
+					actionArray[i].y +=100;
+					self.drawing.drawAction(actionArray[i],false);
+					break;
+				case _SET_COLOR_ACTION :
+					self.drawing.drawAction(actionArray[i],false);
+					break;
+				case _SET_STOKE_SIZE:
+					self.drawing.drawAction(actionArray[i],false);
+				default:
+					break;
+			}
+		}
+
+			
 			
 		if (isLast)
 		{
