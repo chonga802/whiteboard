@@ -9,8 +9,8 @@ function startScript(canvasId)
 	"./images/selected_red.png", "./images/selected_purple.png"];
 
 	var isRecording = false;
+	var allPlayBackIndex=0;
 	playbackInterruptCommand = "";
-	
 	$(document).bind("ready", function()
 	{
 		$("#pauseBtn").hide();
@@ -188,19 +188,9 @@ function startScript(canvasId)
 			return;
 		}
 		else{
-			r=0;
-			while(r<drawing.recordingsList.length){
-				drawing.recordings=drawing.recordingsList[r];
-				console.log(r);
-				startPlayback();
-				w=0;
-				while(w<100){
-					console.log("w"); 	
-					console.log(w);
-					w++;
-				}
-				r++;
-			}
+			drawing.allPlayBackIndex=0;
+			drawing.recordings = drawing.recordingsList[drawing.allPlayBackIndex];
+			startAllPlayback();
 		}
 				
 	}
@@ -276,6 +266,7 @@ function startScript(canvasId)
 				drawing.setColor(currColor);
 			if (currStrokeSize > 0)
 				drawing.setStrokeSize(currStrokeSize);
+
 		}, function() {
 			//on pause
 			$("#playBtn").prop("value","Resume");
@@ -287,6 +278,55 @@ function startScript(canvasId)
 			return playbackInterruptCommand;
 		});
 	}
+
+
+
+	function startAllPlayback()
+	{
+		console.log('start playback');
+		drawing.isPlaying = true;
+		var currColor = $("#colorsDiv .selectedColor").css("background-color");
+		var currStrokeSize = parseInt($(".stroke_selected").css("border-radius"));
+		
+		drawing.playRecording(function() {
+			//on playback start
+			$("#playBtn").prop("value","Stop");
+			$("#recordBtn").hide();
+			//$("#pauseBtn").show();
+			$("#clearBtn").hide();
+			playbackInterruptCommand = "";
+		}, function(){
+			//on playback end
+			$("#playBtn").prop("value","Play");
+			$("#playBtn").attr('src', "./images/playbutton.png");
+			$("#playBtn").show();
+			$("#playAllBtn").show();
+			$("#recordBtn").show();
+			$("#pauseBtn").hide();
+			$("#clearBtn").show();
+			if (currColor && currColor != "")
+				drawing.setColor(currColor);
+			if (currStrokeSize > 0)
+				drawing.setStrokeSize(currStrokeSize);
+			if(drawing.allPlayBackIndex<drawing.recordingsList.length){
+				drawing.allPlayBackIndex++;
+				drawing.recordings = drawing.recordingsList[drawing.allPlayBackIndex];
+				startAllPlayback();
+				
+			}
+		}, function() {
+			//on pause
+			$("#playBtn").prop("value","Resume");
+			$("#recordBtn").hide();
+			//$("#playBtn").hide();
+			$("#clearBtn").hide();
+		}, function() {
+			//status callback
+			return playbackInterruptCommand;
+		});
+	}
+
+
 	
 	function pausePlayback()
 	{
