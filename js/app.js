@@ -211,12 +211,16 @@ function startScript(canvasId)
 	function stopPlayback()
 	{
 		console.log('stop playback');
-		playbackInterruptCommand = "stop";		
+		playbackInterruptCommand = "stop";	
+		drawing.isPlaying = false;	
+		drawing.translateX = 0;
+		drawing.translateY = 0;	
 	}
 	
 	function startPlayback()
 	{
 		console.log('start playback');
+		drawing.isPlaying = true;
 		var currColor = $("#colorsDiv .selectedColor").css("background-color");
 		var currStrokeSize = parseInt($(".stroke_selected").css("border-radius"));
 		

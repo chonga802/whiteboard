@@ -17,37 +17,36 @@ RecordableDrawing = function (canvasId)
 	this.bgColor = "rgb(255,255,255)";
 	this.currentLineWidth = 5;
 	this.drawingColor = "rgb(0,0,0)";
-	//ANGIE -- did not have following 3 variables
-	this.isPlaying =false;
-	this.startX=0;
-	this.startY=0;
-	var pauseInfo = null;
+	//CHRISTINE
+	this.translateX = 0;
+	this.translateY = 0;
+	this.isPlaying = false;
+	//CHRISTINE END
+
 
 	onMouseDown = function(event)
 	{
-		if(self.isPlaying==false){
-			var canvasX = $(self.canvas).offset().left;
-			var canvasY = $(self.canvas).offset().top;
-			
-			self.mouseDown = true;
-			var x = Math.floor(event.pageX - canvasX);
-			var y = Math.floor(event.pageY - canvasY);
-			
-			var	currAction = new Point(x,y,0);
-			self.drawAction(currAction,true);
-			if (self.currentRecording != null)
-				self.currentRecording.addAction(currAction);
-			event.preventDefault();
-			return false;
-		} //ANGIE -- did not have a whole if else statement before. just what is inside the if  
-		else
-			var canvasX = $(self.canvas).offset().left;
-			var canvasY = $(self.canvas).offset().top;
-			self.mouseDown = true;
-			self.shiftX = Math.floor(event.pageX - canvasX);
-			self.shiftY = Math.floor(event.pageY - canvasY);
-			console.log("setting variables to "+canvasX +" and "+canvasY+"\n");
-			return false;
+		var canvasX = $(self.canvas).offset().left;
+		var canvasY = $(self.canvas).offset().top;
+		
+		self.mouseDown = true;
+		var x = Math.floor(event.pageX - canvasX);
+		var y = Math.floor(event.pageY - canvasY);
+
+		//CHRISTINE
+		if(self.isPlaying==true){
+			self.translateX = x;
+			self.translateY = y;
+			console.log("setting translateX=" + x + ",translateY=" + y);
+		}
+		//CHRISTINE END
+		
+		var	currAction = new Point(x,y,0);
+		self.drawAction(currAction,true);
+		if (self.currentRecording != null)
+			self.currentRecording.addAction(currAction);
+		event.preventDefault();
+		return false;
 		
 	}
 	
@@ -127,8 +126,6 @@ RecordableDrawing = function (canvasId)
 	
 	this.playRecording = function(onPlayStart, onPlayEnd, onPause, interruptActionStatus)
 	{
-		//ANGIE -- did not have isplaying variable
-		//self.isPlaying = true;
 		if (typeof interruptActionStatus == 'undefined')
 			interruptActionStatus = null;
 		
@@ -255,8 +252,10 @@ RecordableDrawing = function (canvasId)
 	
 	function drawPoint (actionArg)
 	{
-		var x = actionArg.x;
-		var y = actionArg.y;
+		var x = actionArg.x + self.translateX;
+		var y = actionArg.y + self.translateY;
+		console.log("translateX=" + self.translateX);
+		console.log("translateY=" + self.translateY);
 		
 		switch (actionArg.type)
 		{
@@ -457,35 +456,8 @@ Recording = function (drawingArg)
 	
 	this.drawActions = function (actionArray, onPlayEnd, isFirst, isLast)
 	{
-		for (var i = 0; i < actionArray.length; i++){
-
-			switch (actionArray[i].actionType)
-			{
-				case _POINT_ACTION :
-					//ANGIE
-					//HERE IS WHERE WE ACTUALLY SHIFT/TRANSLATE THE IMAGE
-					console.log(actionArray[i].x);
-					console.log(actionArray[i].y);
-					console.log(actionArray[i].x+self.shiftX);
-					console.log(actionArray[i].x+self.shiftY);					
-					// actionArray[i].x +=self.shiftX;
-					// actionArray[i].y +=self.shiftY;
-					actionArray[i].x +=100;
-					//actionArray[i].y +=100;
-					
-					self.drawing.drawAction(actionArray[i],false);
-					break;
-				case _SET_COLOR_ACTION :
-					self.drawing.drawAction(actionArray[i],false);
-					break;
-				case _SET_STROKE_SIZE:
-					self.drawing.drawAction(actionArray[i],false);
-				default:
-					break;
-			}
-		}
-
-			
+		for (var i = 0; i < actionArray.length; i++)
+			self.drawing.drawAction(actionArray[i],false);
 			
 		if (isLast)
 		{
