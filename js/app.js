@@ -19,6 +19,7 @@ function startScript(canvasId)
 		$("#recordBtn").css('cursor', 'pointer');
 		$("#pauseBtn").css('cursor', 'pointer');
 		$("#playBtn").css('cursor', 'pointer');
+		$("#playAllBtn").css('cursor', 'pointer');
 		$("#sidebarBtn").css('cursor', 'pointer');
 		$("#clearBtn").css('cursor', 'pointer');
 		//$("#canvasBtnsDiv>img").css('cursor', 'pointer');
@@ -178,6 +179,7 @@ function startScript(canvasId)
 		addRecordingButton();
 		//$("#recordBtn").prop("value","Record");
 		$("#playBtn").show();
+		$("#playAllBtn").show();
 		$("#pauseBtn").attr('src', "./images/pause_recording.png");
 		$("#undoBtn").hide();
 		$("#pauseBtn").hide();
@@ -192,6 +194,7 @@ function startScript(canvasId)
 		console.log('start recording');
 		//$("#recordBtn").prop("value","Stop");
 		$("#playBtn").hide();
+		$("#playAllBtn").hide();
 		$("#pauseBtn").show();
 		$("#clearBtn").hide();
 		$("#undoBtn").show();
@@ -229,6 +232,7 @@ function startScript(canvasId)
 			$("#playBtn").prop("value","Play");
 			$("#playBtn").attr('src', "./images/playbutton.png");
 			$("#playBtn").show();
+			$("#playAllBtn").show();
 			$("#recordBtn").show();
 			$("#pauseBtn").hide();
 			$("#clearBtn").show();
@@ -264,6 +268,7 @@ function startScript(canvasId)
 			$("#pauseBtn").show();
 			$("#recordBtn").hide();
 			$("#playBtn").show();
+			$("#playAllBtn").show();
 			$("#clearBtn").hide();
 		});
 	}
