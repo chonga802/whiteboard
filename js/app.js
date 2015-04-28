@@ -142,7 +142,6 @@ function startScript(canvasId)
 			{
 				alert("No recording to play");
 				$("#playBtn").attr('src', "./images/playbutton_hover.png");
-
 				return;
 			}
 			var btnTxt = $("#playBtn").prop("value");
@@ -188,6 +187,7 @@ function startScript(canvasId)
 			return;
 		}
 		else{
+			drawing.clearCanvas();
 			drawing.allPlayBackIndex=0;
 			drawing.recordings = drawing.recordingsList[drawing.allPlayBackIndex];
 			startAllPlayback();
@@ -283,12 +283,13 @@ function startScript(canvasId)
 
 	function startAllPlayback()
 	{
-		console.log('start playback');
+
+		console.log('start all playback');
 		drawing.isPlaying = true;
 		var currColor = $("#colorsDiv .selectedColor").css("background-color");
 		var currStrokeSize = parseInt($(".stroke_selected").css("border-radius"));
 		
-		drawing.playRecording(function() {
+		drawing.playAllRecording(function() {
 			//on playback start
 			$("#playBtn").prop("value","Stop");
 			$("#recordBtn").hide();

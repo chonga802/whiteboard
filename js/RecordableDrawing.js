@@ -163,6 +163,43 @@ RecordableDrawing = function (canvasId)
 		}
 	}
 
+	this.playAllRecording = function(onPlayStart, onPlayEnd, onPause, interruptActionStatus)
+	{
+		if (typeof interruptActionStatus == 'undefined')
+			interruptActionStatus = null;
+		
+		if (self.recordings.length == 0)
+		{
+			alert("No recording loaded to play");
+			onPlayEnd();
+			return;
+		}
+
+		onPlayStart();
+		
+		self.pausedRecIndex = -1;
+		
+		for (var rec = 0; rec < self.recordings.length; rec++)
+		{
+			if (interruptActionStatus != null)
+			{
+				var status = interruptActionStatus();
+				if (status == "stop") {
+					pauseInfo = null;
+					break;
+				}
+				else 
+					if (status == "pause") {
+						__onPause(rec-1, onPlayEnd, onPause, interruptActionStatus);
+						break;
+					}
+			}
+			self.recordings[rec].playRecording(self.drawActions, onPlayEnd, function(){
+				__onPause(rec-1, onPlayEnd, onPause, interruptActionStatus);
+			}, interruptActionStatus);
+		}
+	}
+
 	function __onPause(index, onPlayEnd, onPause, interruptActionStatus)
 	{
 		pauseInfo = {
