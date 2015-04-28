@@ -119,6 +119,11 @@ function startScript(canvasId)
 			
 		});
 
+		$("#playAllBtn").click(function(){
+			console.log("playing all recordings");
+			playAllRecordings();
+		});
+
 		$("#sidebarBtn").click(function(){
 			if($("#sidebar").width() < 100){
 				$("#sidebar").animate({'width':'150', 'left':'-=100'});
@@ -173,6 +178,33 @@ function startScript(canvasId)
 			drawing.setStrokeSize(size);
 	});
 	
+
+	function playAllRecordings()
+	{
+		//drawing.recordings = drawing.recordingsList[num];
+		if (drawing.recordings.length == 0)
+		{
+			alert("No recording to play");
+			return;
+		}
+		else{
+			r=0;
+			while(r<drawing.recordingsList.length){
+				drawing.recordings=drawing.recordingsList[r];
+				console.log(r);
+				startPlayback();
+				w=0;
+				while(w<100){
+					console.log("w"); 	
+					console.log(w);
+					w++;
+				}
+				r++;
+			}
+		}
+				
+	}
+
 	function stopRecording()
 	{
 		console.log('stop recording');
