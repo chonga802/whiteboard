@@ -47,12 +47,24 @@
 
 #canvasBtnsDiv{
 	position: fixed;
-	top: 540px;
+	top: 560px;
 	left: 160px;
 }
+
+#canvasBtnsDiv p{
+	position: fixed;
+	top: 520px;
+	left: 160px;
+}
+
 #recordBtn{
 	position: absolute;
 	top: -440px;
+}
+#cancelBtn{
+	position: absolute;
+	left: 330px;
+	top: 7px;
 }
 #pauseBtn{	
 	position: absolute;
@@ -109,7 +121,7 @@
 }
 #hidden_sidebar{
 	position: relative;
-	top: 50px;
+	top: 10px;
 	left: 15px;
 }
 #clearBtn{

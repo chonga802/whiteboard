@@ -18,6 +18,7 @@ function startScript(canvasId)
 		$("#undoBtn").hide();
 		$("#hidden_sidebar").hide();
 		$("#recordBtn").css('cursor', 'pointer');
+		$("#cancelBtn").css('cursor', 'pointer');
 		$("#pauseBtn").css('cursor', 'pointer');
 		$("#playBtn").css('cursor', 'pointer');
 		$("#playAllBtn").css('cursor', 'pointer');
@@ -34,6 +35,9 @@ function startScript(canvasId)
 			drawing.undo();
 		});
 
+		$("#cancelBtn").click(function(){
+			$("#editBar").hide();
+		});
 
 		$("#recordBtn").hover(function(){
 				if($(this).attr('src')=="./images/recordbutton.png"){

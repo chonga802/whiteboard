@@ -26,9 +26,13 @@
 		<div style="float:left" id="colorsDiv">
 				Colors :
 		<div class="colorbox selectedColor" id="blackbox" style="background-color:black" ></div>
-		<div class="colorbox" id="redbox" style="background-color:red;"></div>
-		<div class="colorbox" id="bluebox" style="background-color:blue;"></div>
-		<div class="colorbox" id="greenbox" style="background-color:green;"></div>
+		<div class="colorbox" id="redbox" style="background-color:#FF4719; opacity:.9;"></div>
+		<div class="colorbox" id="bluebox" style="background-color:#9966FF; opacity:.9;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#00CC99; opacity:.9;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#CC0066; opacity:.9;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#3399FF; opacity:.9;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#33CC33; opacity:.9;"></div>
+
 		<div>
 		<br />
 				Stroke Size :
@@ -62,10 +66,12 @@
 </div>
 
 
+
 <div id="editBar">
 	<img src="./images/playbutton.png" alt="Play" style="width:50px;height:auto" id="playBtn">
+	<img src="./images/cancel.png" alt="Cancel" style="width:10px;height:auto" id="cancelBtn">
+
 	<p>Edit: 
-	<!--<p> Pick a recording then hit Play: </p>-->
 	Speed x (1-10) &nbsp<input type="text" id="userInput" size="2" maxlength="2"></input>
 	<button onclick="test()">Submit</button>
 	<script>
@@ -78,7 +84,10 @@
     </script>
 	</p>
 </div>
+
 <div id="canvasBtnsDiv">
+	<p> Pick a recording then hit Play: </p>
+
 </div>
 
 
