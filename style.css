@@ -63,7 +63,7 @@
 }
 #cancelBtn{
 	position: absolute;
-	left: 330px;
+	left: 430px;
 	top: 7px;
 }
 #pauseBtn{	
@@ -90,7 +90,7 @@
 }
 
 #editBar{
-	width: 350px;
+	width: 450px;
 	height: 60px;
 	position: relative;
 	top: 441px;

@@ -389,6 +389,7 @@ function startScript(canvasId)
 	    element.appendChild(t);
 	    element.onclick = function() { 
 	    	$("#editBar").show();
+	    	$("#cancelBtn2").show();
 
 	    	//show vs. hide images??
 	        drawing.recordings = drawing.recordingsList[this.value-1];
@@ -402,6 +403,7 @@ function startScript(canvasId)
 				else
 	       			$("#" + i).attr('src', imageColorsUnselected[i%(imageColorsUnselected.length)]);
 			}
+
 	    };
 
 	    var btns = document.getElementById("canvasBtnsDiv");
