@@ -235,9 +235,9 @@ function startScript(canvasId)
 	{
 		console.log('stop playback');
 		playbackInterruptCommand = "stop";	
-		drawing.isPlaying = false;	
-		drawing.translateX = 0;
-		drawing.translateY = 0;	
+		// drawing.isPlaying = false;	
+		// drawing.translateX = 0;
+		// drawing.translateY = 0;	
 	}
 	
 	function startPlayback()
@@ -286,7 +286,7 @@ function startScript(canvasId)
 	{
 
 		console.log('start all playback');
-		drawing.isPlaying = true;
+		// drawing.isPlaying = true;
 		var currColor = $("#colorsDiv .selectedColor").css("background-color");
 		var currStrokeSize = parseInt($(".stroke_selected").css("border-radius"));
 		

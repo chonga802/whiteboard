@@ -20,7 +20,7 @@ RecordableDrawing = function (canvasId)
 	//CHRISTINE
 	this.translateX = 0;
 	this.translateY = 0;
-	this.isPlaying = false;
+	// this.isPlaying = false;
 	//CHRISTINE END
 
 
@@ -34,11 +34,11 @@ RecordableDrawing = function (canvasId)
 		var y = Math.floor(event.pageY - canvasY);
 
 		//CHRISTINE
-		if(self.isPlaying==true){
-			self.translateX = x;
-			self.translateY = y;
-			console.log("setting translateX=" + x + ",translateY=" + y);
-		}
+		// if(self.isPlaying==true){
+		// 	self.translateX = x;
+		// 	self.translateY = y;
+		// 	console.log("setting translateX=" + x + ",translateY=" + y);
+		// }
 		//CHRISTINE END
 		
 		var	currAction = new Point(x,y,0);
@@ -291,8 +291,8 @@ RecordableDrawing = function (canvasId)
 	{
 		var x = actionArg.x + self.translateX;
 		var y = actionArg.y + self.translateY;
-		console.log("translateX=" + self.translateX);
-		console.log("translateY=" + self.translateY);
+		// console.log("translateX=" + self.translateX);
+		// console.log("translateY=" + self.translateY);
 		
 		switch (actionArg.type)
 		{
