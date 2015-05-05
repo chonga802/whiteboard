@@ -14,6 +14,7 @@ function startScript(canvasId)
 	$(document).bind("ready", function()
 	{
 		$("#pauseBtn").hide();
+		$("#editBar").hide();
 		$("#undoBtn").hide();
 		$("#hidden_sidebar").hide();
 		$("#recordBtn").css('cursor', 'pointer');
@@ -383,6 +384,8 @@ function startScript(canvasId)
 	    var t = document.createTextNode(num);
 	    element.appendChild(t);
 	    element.onclick = function() { 
+	    	$("#editBar").show();
+
 	    	//show vs. hide images??
 	        drawing.recordings = drawing.recordingsList[this.value-1];
 	        //$("#" + i).setAttribute('src', "./images/playback_unselected");

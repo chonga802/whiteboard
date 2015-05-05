@@ -1,5 +1,5 @@
 /*body{
-	background-color: #CCD6E0;
+	background-color: #E6DEDC; //eggshell white
 }*/
 
 *{
@@ -61,21 +61,39 @@
 }
 #playBtn{
 	position: absolute;
-	left: 70px;
-	top: 110px;
+	top: 7px;
+	left: 10px;
 }
 #undoBtn{
 	position:absolute;
 	top: -440px;
 	left: 770px;
 }
-#canvasBtnsDiv p{
+
+#editBar p{
 	font-family: 'Raleway', sans-serif;
-	position: relative;
-	top: -10px;
-	margin-bottom: 0px;
-	left: -60px;
+	position: absolute;
+	left: 80px;
+	top: 7px;
 }
+
+#editBar{
+	width: 350px;
+	height: 60px;
+	position: relative;
+	top: 441px;
+	left: 0px;
+	background-color: #CCD6E0;
+}
+
+/*#editBar img{
+	width: 500px;
+	height: 50px;
+	position: relative;
+	top: -30px;
+	left: 15px;
+	background-color: gray;
+}*/
 
 #sidebar{
 	position: fixed;
@@ -101,6 +119,6 @@
 }
 #playAllBtn{
 	position: absolute;
-	left: 0px;
-	top: 110px;
+	left: 10px;
+	top: 50px;
 }
