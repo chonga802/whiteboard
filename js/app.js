@@ -2,8 +2,6 @@ startScript("canvas1");
 
 function startScript(canvasId)
 { 
-	/*var imageColorsSelected=["./images/unselected_red.png", "./images/unselected_blue.png",
-	"./images/unselected_green.png", "./images/unselected_purple.png"];*/
 
 	var imageColorsUnselected=["./images/selected_green.png", "./images/selected_blue.png", 
 	"./images/selected_red.png", "./images/selected_purple.png"];
@@ -19,14 +17,12 @@ function startScript(canvasId)
 		$("#hidden_sidebar").hide();
 		$("#recordBtn").css('cursor', 'pointer');
 		$("#cancelBtn").css('cursor', 'pointer');
+		$("#cancelBtnStart").css('cursor', 'pointer');
 		$("#pauseBtn").css('cursor', 'pointer');
 		$("#playBtn").css('cursor', 'pointer');
 		$("#playAllBtn").css('cursor', 'pointer');
 		$("#sidebarBtn").css('cursor', 'pointer');
 		$("#clearBtn").css('cursor', 'pointer');
-		//$("#canvasBtnsDiv>img").css('cursor', 'pointer');
-
-
 		
 		drawing = new RecordableDrawing(canvasId);
 		
@@ -37,6 +33,9 @@ function startScript(canvasId)
 
 		$("#cancelBtn").click(function(){
 			$("#editBar").hide();
+		});
+		$("#cancelBtnStart").click(function(){
+			$("#startingText").hide();
 		});
 
 		$("#recordBtn").hover(function(){
@@ -58,6 +57,7 @@ function startScript(canvasId)
 		});
 
 		$("#recordBtn").click(function(){
+			$("#startingText").hide();
 			console.log('recordBtn clicked');
 			if($(this).attr('src')=="./images/record_hover.png"){
 				//start recording!
@@ -125,7 +125,12 @@ function startScript(canvasId)
 		});
 
 		$("#playAllBtn").click(function(){
+			for(var i=1; i<=drawing.recordingsList.length; i++){
+	       		$("#" + i).attr('src', imageColorsUnselected[i%(imageColorsUnselected.length)]);
+			}
 			console.log("playing all recordings");
+			$("#playAllBtn").hide();
+			$("#playBtn").hide();
 			playAllRecordings();
 		});
 
@@ -146,6 +151,7 @@ function startScript(canvasId)
 			if (drawing.recordings.length == 0)
 			{
 				alert("No recording to play");
+				$("#playAllBtn").show();
 				$("#playBtn").attr('src', "./images/playbutton_hover.png");
 				return;
 			}
@@ -186,9 +192,10 @@ function startScript(canvasId)
 	function playAllRecordings()
 	{
 		//drawing.recordings = drawing.recordingsList[num];
-		if (drawing.recordings.length == 0)
+		if (drawing.recordingsList.length == 0)
 		{
 			alert("No recording to play");
+			$("#playAllBtn").show();
 			return;
 		}
 		else{
@@ -203,6 +210,8 @@ function startScript(canvasId)
 	function stopRecording()
 	{
 		console.log('stop recording');
+		$("#boolRecord").text("Not Recording");
+		$("#boolRecord").css("color", "blue");
 		addRecordingButton();
 		//$("#recordBtn").prop("value","Record");
 		$("#playBtn").show();
@@ -220,6 +229,8 @@ function startScript(canvasId)
 	{
 		console.log('start recording');
 		//$("#recordBtn").prop("value","Stop");
+		$("#boolRecord").text("Recording");
+		$("#boolRecord").css("color", "red");
 		$("#playBtn").hide();
 		$("#playAllBtn").hide();
 		$("#pauseBtn").show();
@@ -298,15 +309,16 @@ function startScript(canvasId)
 			//on playback start
 			$("#playBtn").prop("value","Stop");
 			$("#recordBtn").hide();
-			//$("#pauseBtn").show();
 			$("#clearBtn").hide();
+			$("#playAllBtn").hide();
+			$("#playBtn").hide();
 			playbackInterruptCommand = "";
 		}, function(){
 			//on playback end
 			$("#playBtn").prop("value","Play");
 			$("#playBtn").attr('src', "./images/playbutton.png");
 			$("#playBtn").show();
-			$("#playAllBtn").show();
+			$("#playAllBtn").show();		
 			$("#recordBtn").show();
 			$("#pauseBtn").hide();
 			$("#clearBtn").show();
@@ -320,6 +332,7 @@ function startScript(canvasId)
 				startAllPlayback();
 				
 			}
+
 		}, function() {
 			//on pause
 			$("#playBtn").prop("value","Resume");
@@ -360,6 +373,7 @@ function startScript(canvasId)
 		console.log('pause recording');
 		drawing.pauseRecording();
 		$("#pauseBtn").prop("value","Resume");
+		$("#boolRecord").text("Not Recording");
 	}
 	
 	function resumeRecording()
@@ -367,19 +381,20 @@ function startScript(canvasId)
 		console.log('record recording');
 		drawing.resumeRecording();
 		$("#pauseBtn").prop("value","Pause");
+		$("#boolRecord").text("Recording");
+		$("#boolRecord").css("color", "red");
 	}
 
+	/*function for creating a new recording segment, and assigning a color block*/
 	function addRecordingButton() {
 		console.log('add recording button');
 		//add recordings to list of recordings saved
 		drawing.recordingsList.push(drawing.recordings);
 	    //Create an input type dynamically.   
-	    var element=document.createElement("img");
-
-	    //element.setAttribute('src', "./images/playback_unselected.png");
-	    
+	    var element=document.createElement("img");	    
 	   	var num = drawing.recordingsList.length;
 	   	var temp=num%(imageColorsUnselected.length);
+	   	//assign color
 	   	element.setAttribute('src', imageColorsUnselected[temp]);
 	   	element.setAttribute('height', '80');
 	    element.setAttribute('width', 'auto');
@@ -387,18 +402,16 @@ function startScript(canvasId)
 	    element.value=num;
 	    var t = document.createTextNode(num);
 	    element.appendChild(t);
+	    //when segmented is selected
 	    element.onclick = function() { 
 	    	$("#editBar").show();
-	    	$("#cancelBtn2").show();
-
 	    	//show vs. hide images??
 	        drawing.recordings = drawing.recordingsList[this.value-1];
-	        //$("#" + i).setAttribute('src', "./images/playback_unselected");
-	        //element.setAttribute('src', "./images/playback_selected.png");
+	        drawing.allPlayBackIndex=this.value-1;
+
 	        for(var i=1; i<=drawing.recordingsList.length; i++){
 	        	if(i == this.value){
 	        		$("#" + i).attr('src', "./images/selected_orange.png");
-					//$("#" + i).attr('src', imageColorsSelected[i%(imageColorsUnselected.length)]);
 				}
 				else
 	       			$("#" + i).attr('src', imageColorsUnselected[i%(imageColorsUnselected.length)]);
@@ -410,3 +423,10 @@ function startScript(canvasId)
 	    btns.appendChild(element);
 	}
 }
+
+
+
+
+
+
+

@@ -1,7 +1,9 @@
 /*
 * @author : Ram Kulkarni (http://ramkulkarni.com)
+* edited by graphics group, cpsc 479
 */
 
+var allPlayBackIndex=-1;
 RecordableDrawing = function (canvasId)
 {
 	var self = this;
@@ -13,10 +15,12 @@ RecordableDrawing = function (canvasId)
 	this.currentRecording = null; //instance of Recording
 	this.recordings = new Array(); //array of Recording objects
 	this.recordingsList = new Array(); //array of recordings
+	//this.speedList = new Array(); //array of speeds for each recording
 	this.lastMouseX = this.lastMouseY = -1;
 	this.bgColor = "rgb(255,255,255)";
 	this.currentLineWidth = 5;
 	this.drawingColor = "rgb(0,0,0)";
+	
 	//CHRISTINE
 	this.translateX = 0;
 	this.translateY = 0;
@@ -96,6 +100,7 @@ RecordableDrawing = function (canvasId)
 		if (self.currentRecording != null)
 			self.currentRecording.addAction(sizeAction);
 	}
+
 	
 	this.startRecording = function()
 	{
@@ -320,10 +325,6 @@ RecordableDrawing = function (canvasId)
 		self.width = $(self.canvas).width();
 		self.height = $(self.canvas).height();
 		self.ctx = self.canvas.getContext("2d");
-		
-		//$(self.canvas).bind("vmousedown", onMouseDown);
-		//$(self.canvas).bind("vmouseup", onMouseUp);
-		//$(self.canvas).bind("vmousemove", onMouseMove);
 
 		$(self.canvas).bind("mousedown", onMouseDown);
 		$(self.canvas).bind("mouseup", onMouseUp);
@@ -467,7 +468,17 @@ Recording = function (drawingArg)
 			if (actionSetArg.next != null)
 			{
 				isLast = false;
-				intervalDiff = actionSetArg.next.interval - actionSetArg.interval;
+				var userInput;
+				if (document.getElementById("userInput").value < 1 || document.getElementById("userInput").value > 10){
+					document.getElementById("userInput").value=1;
+					userInput = 1;
+				}
+				else{
+					userInput=document.getElementById("userInput").value;
+				}
+				console.log(document.getElementById("userInput").value);
+				intervalDiff = (actionSetArg.next.interval - actionSetArg.interval)/userInput;
+				
 			}
 			if (intervalDiff >= 0)
 				self.scheduleDraw(actionSetArg.next, intervalDiff, callbackFunctionArg, onPlayEnd, onPause, false,interruptActionStatus);

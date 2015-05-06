@@ -6,17 +6,36 @@
 
 <link rel="stylesheet" type="text/css" href="style.css">
 <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+<script src="app.js" type="text/javascript"></script>
+<script src="RecordableDrawing.js" type="text/javascript"></script>
+<link href='http://fonts.googleapis.com/css?family=Dancing+Script' rel='stylesheet' type='text/css'>
 
 </head>
 
 <body>
 
 <div id="main">
+<div id="title">BoardRecord</div>
 
 <div id="drawingDiv" >
 	<canvas id="canvas1" width="1000px" height="500px;float:left" style="border:thin;border-color:#CCD6E0;border-style:solid;z-index:1;"></canvas></p>
 	<!--<canvas id="canvas1" width="1000px" height="600px;float:left" style="z-index:1;"></canvas></p>-->
 </div>
+
+<div id="startingText">
+	<img src="./images/cancel.png" alt="Cancel" style="width:10px;height:auto" id="cancelBtnStart">
+	<p>Welcome! Here are a few things to get you started: <br><br>
+		To start recording, press the camera button on the left. <br>
+		To stop recording, press the same button again. <br><br>
+		Once you stop recording, a segment will be created and displayed as a <br> color box below. You may select 
+		any segment, and play it individually,<br> 
+		or you may play all recordings using the Play All button. <br><br>
+		The right sidebar will expand to show various brush options.<br><br>
+		You may also edit the speed of the playback by <br> inputting a number between 1-10.
+	</p>
+</div>
+
+<div id="boolRecord">Not Recording</div>
 
 
 <div id = "sidebar">
@@ -26,12 +45,12 @@
 		<div style="float:left" id="colorsDiv">
 				Colors :
 		<div class="colorbox selectedColor" id="blackbox" style="background-color:black" ></div>
-		<div class="colorbox" id="redbox" style="background-color:#FF4719; opacity:.9;"></div>
-		<div class="colorbox" id="bluebox" style="background-color:#9966FF; opacity:.9;"></div>
-		<div class="colorbox" id="greenbox" style="background-color:#00CC99; opacity:.9;"></div>
-		<div class="colorbox" id="greenbox" style="background-color:#CC0066; opacity:.9;"></div>
-		<div class="colorbox" id="greenbox" style="background-color:#3399FF; opacity:.9;"></div>
-		<div class="colorbox" id="greenbox" style="background-color:#33CC33; opacity:.9;"></div>
+		<div class="colorbox" id="redbox" style="background-color:#FF4719;"></div>
+		<div class="colorbox" id="bluebox" style="background-color:#9966FF;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#00CC99;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#CC0066;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#3399FF;"></div>
+		<div class="colorbox" id="greenbox" style="background-color:#33CC33;"></div>
 
 		<div>
 		<br />
@@ -71,23 +90,13 @@
 	<img src="./images/playbutton.png" alt="Play" style="width:50px;height:auto" id="playBtn">
 	<img src="./images/cancel.png" alt="Cancel" style="width:10px;height:auto" id="cancelBtn">
 
-	<p>Edit: 
-	Speed x (1-10) &nbsp<input type="text" id="userInput" size="2" maxlength="2"></input>
-	<button onclick="test()">Submit</button>
-	<button>Delete Recording</button>
-	<script>
-        function test()
-        {
-        	$("#editBar").hide();
-        	//this code will happen once you click submit! below is syntax for how to get the userInput. 
-            //var userInput = document.getElementById("userInput").value;
-        }
-    </script>
 	</p>
 </div>
 
 <div id="canvasBtnsDiv">
-	<p> Pick a recording then hit Play: </p>
+	<p> Pick a recording, then hit Play/Play All. 
+	 
+	&nbsp&nbspSpeed of playback (1-10): &nbsp<input type="text" id="userInput" size="2" maxlength="2" value="1"></input></p>
 
 </div>
 

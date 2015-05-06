@@ -6,6 +6,28 @@
 	font-family: 'Raleway', sans-serif;
 }
 
+#title{
+	position: relative;
+	left: 410px;
+	width: 200px;
+	font-family: 'Dancing Script', cursive;
+	font-size: 30px;
+}
+
+#startingText{
+	position: absolute;
+	top: 120px;
+	left: 200px;
+	border: solid thin #CCD6E0;
+	padding: 20px;
+	background-color: #E6DEDC;
+}
+#startingText img{
+	position: absolute;
+	left: 510px;
+	top: 20px;
+}
+
 #colorsDiv .colorbox {
 		width:20px; 
 		height:20px;
@@ -40,20 +62,20 @@
 }
 #myButtons{
 	position: fixed;
-	top: 480px;
+	top: 530px;
 	left: 30px;
 	z-index: 10;
 }
 
 #canvasBtnsDiv{
 	position: fixed;
-	top: 560px;
+	top: 600px;
 	left: 160px;
 }
 
 #canvasBtnsDiv p{
 	position: fixed;
-	top: 520px;
+	top: 560px;
 	left: 160px;
 }
 
@@ -61,11 +83,7 @@
 	position: absolute;
 	top: -440px;
 }
-#cancelBtn{
-	position: absolute;
-	left: 430px;
-	top: 7px;
-}
+
 #pauseBtn{	
 	position: absolute;
 	top: -440px;
@@ -90,22 +108,23 @@
 }
 
 #editBar{
-	width: 450px;
+	width: 70px;
 	height: 60px;
 	position: relative;
-	top: 441px;
-	left: 0px;
-	background-color: #CCD6E0;
+	top: 565px;
+	left: 25px;
+	
+	
 }
 
-/*#editBar img{
-	width: 500px;
-	height: 50px;
-	position: relative;
-	top: -30px;
-	left: 15px;
-	background-color: gray;
-}*/
+#boolRecord{
+	position: absolute;
+	width: 200px;
+	left: 720px;
+	top: 80px;
+	font-size: 20px;
+	color: blue;
+}
 
 #sidebar{
 	position: fixed;
